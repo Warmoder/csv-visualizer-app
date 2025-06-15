@@ -1,125 +1,125 @@
 # Created by https://www.toptal.com/developers/gitignore/api/node,python,react,flask,jetbrains,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=node,python,react,flask,jetbrains,visualstudiocode
 
-### Python / Flask Specific ###
-# Virtual Environments - НАЙВАЖЛИВІШЕ ДЛЯ ВАС ЗАРАЗ
-venv/
-.venv/
-env/
-ENV/
-myenv/
-env.bak/
-venv.bak/
+### Python / Flask Specific (inside backend/) ###
+# Virtual Environments
+backend/venv/
+backend/.venv/
+backend/env/
+backend/ENV/
+backend/myenv/
+backend/env.bak/
+backend/venv.bak/
 
 # Python cache files and byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
+backend/__pycache__/
+backend/*.py[cod]
+backend/*$py.class
+backend/*.so
 
 # Distribution / packaging (залишимо основні)
-build/
-dist/
-eggs/
-.eggs/
-wheels/
-*.egg-info/
-*.egg
+backend/build/
+backend/dist/
+backend/eggs/
+backend/.eggs/
+backend/wheels/
+backend/*.egg-info/
+backend/*.egg
 
 # Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
+backend/pip-log.txt
+backend/pip-delete-this-directory.txt
 
 # Unit test / coverage reports (якщо плануєте тести)
-htmlcov/
-.coverage
-.coverage.*
-.pytest_cache/
-cover/
+backend/htmlcov/
+backend/.coverage
+backend/.coverage.*
+backend/.pytest_cache/
+backend/cover/
 
 # Flask specific
-instance/*
-!instance/.gitignore # Дозволяє мати .gitignore всередині instance, якщо потрібно
-.webassets-cache
+backend/instance/*
+!backend/instance/.gitignore # Дозволяє мати .gitignore всередині instance, якщо потрібно
+backend/.webassets-cache
 
-# Environments (дублює секцію Virtual Environments, але це не страшно)
-.env
-.env.*
-env.bak 
-# .envrc - залиште, якщо використовуєте direnv
+# Environments
+backend/.env
+backend/.env.*
+backend/env.bak 
+# backend/.envrc - залиште, якщо використовуєте direnv
 
-### Node / React Specific ###
+### Node / React Specific (inside frontend/) ###
 # Logs
-logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-# lerna-debug.log* # Якщо не використовуєте Lerna
-.pnpm-debug.log* # Якщо не використовуєте pnpm
+frontend/logs
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+# frontend/lerna-debug.log* # Якщо не використовуєте Lerna
+frontend/.pnpm-debug.log* # Якщо не використовуєте pnpm
 
 # Runtime data
-pids
-*.pid
-*.seed
-*.pid.lock
+frontend/pids
+frontend/*.pid
+frontend/*.seed
+frontend/*.pid.lock
 
 # Coverage directory used by tools like istanbul
-coverage
-*.lcov
+frontend/coverage
+frontend/*.lcov
 
 # nyc test coverage
-.nyc_output
+frontend/.nyc_output
 
 # Dependency directories - НАЙВАЖЛИВІШЕ ДЛЯ ФРОНТЕНДУ
-node_modules/
-# jspm_packages/ # Якщо не використовуєте jspm
+frontend/node_modules/
+# frontend/jspm_packages/ # Якщо не використовуєте jspm
 
 # TypeScript cache (якщо будете використовувати TS)
-*.tsbuildinfo
+frontend/*.tsbuildinfo
 
 # Optional npm cache directory
-.npm
+frontend/.npm
 
 # Optional eslint cache
-.eslintcache
+frontend/.eslintcache
 
 # Output of 'npm pack'
-*.tgz
+frontend/*.tgz
 
 # dotenv environment variable files (для Node/React)
-.env.development.local
-.env.test.local
-.env.production.local
-.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+frontend/.env.local
 
 # parcel-bundler cache (якщо не використовуєте Parcel)
-# .parcel-cache
+# frontend/.parcel-cache
 
 # Next.js build output (якщо не використовуєте Next.js)
-# .next
-# out
+# frontend/.next
+# frontend/out
 
 # Create React App build directory
-# build/ # Вже є в загальній секції Python, але для фронтенду це теж актуально
+frontend/build/ # Важливо для React
 
 # yarn v2 (якщо використовуєте Yarn 2+)
-# .yarn/cache
-# .yarn/unplugged
-# .yarn/build-state.yml
-# .yarn/install-state.gz
-# .pnp.*
+# frontend/.yarn/cache
+# frontend/.yarn/unplugged
+# frontend/.yarn/build-state.yml
+# frontend/.yarn/install-state.gz
+frontend/.pnp.* # .pnp вже є вище, але це ширше
 
 ### JetBrains IDEs (PyCharm, WebStorm, etc.) ###
 # User-specific stuff
 .idea/**/workspace.xml
 .idea/**/tasks.xml
 .idea/**/usage.statistics.xml
-.idea/**/dictionaries/
-.idea/**/shelf/
+.idea/**/dictionaries/ # Додав слеш в кінці
+.idea/**/shelf/ # Додав слеш в кінці
 
 # Sensitive or high-churn files
-.idea/**/dataSources/
-.idea/**/dataSources.ids/
+.idea/**/dataSources/ # Додав слеш в кінці
+.idea/**/dataSources.ids/ # Додав слеш в кінці
 .idea/**/dataSources.local.xml
 .idea/**/sqlDataSources.xml
 .idea/**/dynamic.xml
@@ -134,9 +134,11 @@ node_modules/
 cmake-build-*/
 
 # IntelliJ (загальне)
-# out/ # Може конфліктувати з Next.js 'out', якщо використовуєте обидва
+# out/ # Може конфліктувати з Next.js 'out' або Python 'build', краще вказувати конкретніше для кожного проекту
 
 ### VisualStudioCode ###
+# Застосовується до всього репозиторію, якщо .vscode в корені,
+# або можна додати frontend/.vscode/* та backend/.vscode/* якщо налаштування специфічні
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
@@ -144,20 +146,21 @@ cmake-build-*/
 !.vscode/extensions.json
 !.vscode/*.code-snippets
 
-# Local History for Visual Studio Code
+# Local History for Visual Studio Code (застосовується до всього репозиторію)
 .history/
 
 # Built Visual Studio Code Extensions
 *.vsix
 
-### General ###
+### General (застосовується до всього репозиторію) ###
 # macOS
 .DS_Store
+**/.DS_Store # Щоб ловити .DS_Store у підпапках
 
 # Backup files
 *.backup.*
 *.back.*
-# *.bak # Можна додати, якщо використовуєте
+*.bak
 
 # Temporary files
 *.tmp
