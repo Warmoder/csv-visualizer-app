@@ -30,7 +30,7 @@
     *   [Pandas](https://pandas.pydata.org/) - для ефективної обробки та аналізу CSV-даних.
 *   **Деплоймент:**
     *   **Фронтенд:** [Vercel](https://vercel.com/) <!-- або Netlify -->
-    *   **Бекенд:** [Heroku](https://www.heroku.com/) <!-- або Railway, Render -->
+    *   **Бекенд:** [Render]([https://www.heroku.com/](https://render.com/docs/render-dashboard)) <!-- або Railway, Render -->
 *   **Управління проектом:**
     *   [GitHub](https://github.com/) (Issues, Projects, Actions)
 
