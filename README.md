@@ -104,10 +104,10 @@
 Цей проект був створений у рамках [назва практики/курсу] командою чудових розробників:
 
 *   **[Бєглов Антон]** - Team Lead / Project Manager ([@GitHub-Warmoder](https://github.com/Warmoder))
-*   **[Гулий Євгеній]** - Backend Developer ([@GitHub-antisociallame]((https://github.com/antisociallame)))
-*   **[Хоменко Назар]** - Frontend Developer (Core Logic) ([@GitHub-Нікнейм](https://github.com/GitHub-Нікнейм))
-*   **[Котигорох Віталій]** - Frontend Developer (UI/UX) ([@GitHub-Нікнейм](https://github.com/GitHub-Нікнейм))
-*   **[Ткалич Євген]** - QA & Documentation Specialist ([@GitHub-gtyroumn]((https://github.com/gtyroumn)))
+*   **[Гулий Євгеній]** - Backend Developer ([@GitHub-antisociallame](https://github.com/antisociallame))
+*   **[Хоменко Назар]** - Frontend Developer (Core Logic) ([@GitHub-N1azar1](https://github.com/N1azar1))
+*   **[Котигорох Віталій]** - Frontend Developer (UI/UX) ([@GitHub-qrcxc](https://github.com/qrcxc))
+*   **[Ткалич Євген]** - QA & Documentation Specialist ([@GitHub-gtyroumn](https://github.com/gtyroumn))
 
 ## 📜 Ліцензія
 
