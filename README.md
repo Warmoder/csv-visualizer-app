@@ -1,10 +1,10 @@
 # CSV Visualizer - Веб-додаток для візуалізації даних
 
-![CSV Visualizer Demo]([https://user-images.githubusercontent.com/...](https://csv-visualizer-app2.vercel.app/)) <!-- TODO: Вставте сюди посилання на скріншот або GIF-анімацію вашого додатку -->
+![CSV Visualizer Demo](https://imgchest.com/p/a8465l85vyx)
 
 Простий та інтуїтивно зрозумілий інструмент, що дозволяє користувачам швидко перетворювати дані з CSV-файлів на інтерактивні графіки прямо в браузері.
 
-**[➡️ Подивитись живу версію (Live Demo)](https://csv-visualizer-app2.vercel.app/)** <!-- TODO: Вставте сюди посилання на ваш задеплоєний сайт на Vercel/Netlify -->
+**[➡️ Подивитись живу версію (Live Demo)](https://csv-visualizer-app2.vercel.app/)**
 
 ---
 
