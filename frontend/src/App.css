@@ -1,166 +1,409 @@
-.App {
-  text-align: center;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+/* Global Resets and Font Import */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  
+  /* Light Theme */
+  --bg-color-light: #f7f9fc;
+  --text-color-light: #2d3748; /* A bit softer than pure black */
+  --text-muted-light: #718096;
+  --primary-color-light: #4A90E2; /* A nice blue */
+  --primary-hover-light: #357ABD;
+  --card-bg-light: #ffffff;
+  --card-border-light: #e2e8f0;
+  --input-bg-light: #ffffff;
+  --input-text-light: #2d3748;
+  --input-border-light: #cbd5e0;
+  --input-focus-border-light: var(--primary-color-light);
+  --input-focus-shadow-light: 0 0 0 3px rgba(74, 144, 226, 0.2);
+  --header-bg-light: #ffffff;
+  --header-text-light: var(--text-color-light);
+  --header-border-light: var(--card-border-light);
+  --button-disabled-bg-light: #e2e8f0;
+  --button-disabled-text-light: #a0aec0;
+  --danger-color-light: #e53e3e;
+  --danger-bg-light: #fed7d7;
+  --danger-border-light: #f5c6cb;
+  --chart-text-color-light: #4A5568;
+  --chart-grid-color-light: rgba(200, 200, 200, 0.2);
+  --chart-bar-rgb-light: 74, 144, 226; /* Blue for Bar */
+  --chart-line-rgb-light: 66, 153, 225; /* Another Blue for Line */
+  --tooltip-bg-rgb-light: 255, 255, 255;
+  --tooltip-text-rgb-light: 45, 55, 72;
+  --tooltip-border-rgb-light: 226, 232, 240;
+
+
+  /* Dark Theme */
+  --bg-color-dark: #1A202C; /* Dark blue-gray */
+  --text-color-dark: #E2E8F0; /* Light gray for text */
+  --text-muted-dark: #A0AEC0;
+  --primary-color-dark: #63B3ED; /* Lighter blue for dark theme */
+  --primary-hover-dark: #4299E1;
+  --card-bg-dark: #2D3748; /* Slightly lighter than page bg */
+  --card-border-dark: #4A5568;
+  --input-bg-dark: #2D3748;
+  --input-text-dark: #E2E8F0;
+  --input-border-dark: #4A5568;
+  --input-focus-border-dark: var(--primary-color-dark);
+  --input-focus-shadow-dark: 0 0 0 3px rgba(99, 179, 237, 0.2);
+  --header-bg-dark: #1A202C;
+  --header-text-dark: var(--text-color-dark);
+  --header-border-dark: var(--card-border-dark);
+  --button-disabled-bg-dark: #4A5568;
+  --button-disabled-text-dark: #718096;
+  --danger-color-dark: #FEB2B2;
+  --danger-bg-dark: #9B2C2C;
+  --danger-border-dark: #C53030;
+  --chart-text-color-dark: #CBD5E0;
+  --chart-grid-color-dark: rgba(255, 255, 255, 0.1);
+  --chart-bar-rgb-dark: 99, 179, 237; /* Lighter Blue for Bar */
+  --chart-line-rgb-dark: 74, 203, 226; /* Cyan for Line */
+  --tooltip-bg-rgb-dark: 45, 55, 72;
+  --tooltip-text-rgb-dark: 226, 232, 240;
+  --tooltip-border-rgb-dark: 74, 85, 104;
+}
+
+html {
+  font-size: 16px; /* Base font size */
+}
+
+html[data-theme='light'] {
+  --bg-color: var(--bg-color-light);
+  --text-color: var(--text-color-light);
+  --text-muted: var(--text-muted-light);
+  --primary-color: var(--primary-color-light);
+  --primary-hover-color: var(--primary-hover-light);
+  --card-bg: var(--card-bg-light);
+  --card-border: var(--card-border-light);
+  --input-bg: var(--input-bg-light);
+  --input-text: var(--input-text-light);
+  --input-border: var(--input-border-light);
+  --input-focus-border: var(--input-focus-border-light);
+  --input-focus-shadow: var(--input-focus-shadow-light);
+  --header-bg: var(--header-bg-light);
+  --header-text: var(--header-text-light);
+  --header-border: var(--header-border-light);
+  --button-disabled-bg: var(--button-disabled-bg-light);
+  --button-disabled-text: var(--button-disabled-text-light);
+  --danger-color: var(--danger-color-light);
+  --danger-bg: var(--danger-bg-light);
+  --danger-border: var(--danger-border-light);
+  --chart-text-color: var(--chart-text-color-light);
+  --chart-grid-color: var(--chart-grid-color-light);
+  --chart-bar-rgb: var(--chart-bar-rgb-light);
+  --chart-line-rgb: var(--chart-line-rgb-light);
+  --tooltip-bg-rgb: var(--tooltip-bg-rgb-light);
+  --tooltip-text-rgb: var(--tooltip-text-rgb-light);
+  --tooltip-border-rgb: var(--tooltip-border-rgb-light);
+}
+
+html[data-theme='dark'] {
+  --bg-color: var(--bg-color-dark);
+  --text-color: var(--text-color-dark);
+  --text-muted: var(--text-muted-dark);
+  --primary-color: var(--primary-color-dark);
+  --primary-hover-color: var(--primary-hover-dark);
+  --card-bg: var(--card-bg-dark);
+  --card-border: var(--card-border-dark);
+  --input-bg: var(--input-bg-dark);
+  --input-text: var(--input-text-dark);
+  --input-border: var(--input-border-dark);
+  --input-focus-border: var(--input-focus-border-dark);
+  --input-focus-shadow: var(--input-focus-shadow-dark);
+  --header-bg: var(--header-bg-dark);
+  --header-text: var(--header-text-dark);
+  --header-border: var(--header-border-dark);
+  --button-disabled-bg: var(--button-disabled-bg-dark);
+  --button-disabled-text: var(--button-disabled-text-dark);
+  --danger-color: var(--danger-color-dark);
+  --danger-bg: var(--danger-bg-dark);
+  --danger-border: var(--danger-border-dark);
+  --chart-text-color: var(--chart-text-color-dark);
+  --chart-grid-color: var(--chart-grid-color-dark);
+  --chart-bar-rgb: var(--chart-bar-rgb-dark);
+  --chart-line-rgb: var(--chart-line-rgb-dark);
+  --tooltip-bg-rgb: var(--tooltip-bg-rgb-dark);
+  --tooltip-text-rgb: var(--tooltip-text-rgb-dark);
+  --tooltip-border-rgb: var(--tooltip-border-rgb-dark);
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font-primary);
+  line-height: 1.6;
+  transition: background-color 0.3s ease, color 0.3s ease;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  padding: 20px;
-  color: #2c3e50;
-  background-color: #f8f9fa;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
 }
 
 .App-header {
-  background-color: #343a40;
-  padding: 25px 20px;
-  color: white;
-  margin-bottom: 30px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  background-color: var(--header-bg);
+  color: var(--header-text);
+  padding: 1rem 1.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--header-border);
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.header-logo {
+    color: var(--primary-color); /* Можна зробити залежним від теми */
+    transition: color 0.3s ease;
 }
 
 .App-header h1 {
   margin: 0;
-  font-size: 2.2em;
-}
-
-.controls {
-  background-color: #ffffff;
-  padding: 25px;
-  border-radius: 8px;
-  margin-bottom: 30px;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-  max-width: 700px;
-  margin-left: auto;
-  margin-right: auto;
-  border: 1px solid #dee2e6;
-}
-
-.controls > div {
-  margin-bottom: 22px;
-}
-
-.controls > div:last-child {
-  margin-bottom: 0;
-}
-
-
-label {
-  display: block;
-  margin-bottom: 10px;
+  font-size: 1.5rem; /* 24px */
   font-weight: 600;
-  color: #495057;
-  text-align: left;
-  font-size: 0.95em;
+  color: var(--header-text);
+  transition: color 0.3s ease;
 }
 
-input[type="file"],
-select {
-  width: 100%;
-  padding: 12px 15px;
-  margin-top: 5px;
-  border: 1px solid #ced4da;
-  border-radius: 6px;
-  box-sizing: border-box;
-  font-size: 1em;
-  background-color: #fff; /* Змінено на білий для кращого контрасту */
-  color: #495057;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
-
-input[type="file"] {
+.theme-toggle-button {
+  background: transparent;
+  color: var(--header-text);
+  border: 1px solid var(--header-text);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
   cursor: pointer;
-  padding: 10px 15px;
+  font-size: 1rem; /* 16px */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
 }
 
-input[type="file"]:hover,
-select:hover {
-  border-color: #80bdff;
-}
-
-select:focus,
-input[type="file"]:focus {
-  border-color: #80bdff;
-  outline: 0;
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-}
-
-.file-name-display {
-  font-size: 0.9em;
-  color: #6c757d;
-  margin-top: 8px;
-  text-align: left;
-}
-
-
-button {
-  background-color: #007bff;
-  color: white;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 1.05em;
-  font-weight: 500;
-  transition: background-color 0.2s ease-in-out, transform 0.1s ease;
-  width: 100%;
-  margin-top: 10px;
-}
-
-button:hover:not(:disabled) { /* Додано :not(:disabled) */
-  background-color: #0056b3;
+.theme-toggle-button:hover {
+  background-color: var(--primary-color);
+  color: white; /* Завжди білий на синьому фоні */
+  border-color: var(--primary-color);
   transform: translateY(-1px);
 }
 
-button:active:not(:disabled) { /* Додано :not(:disabled) */
-  transform: translateY(0px);
+.App-main {
+  flex-grow: 1;
+  padding: 2rem 1rem; /* Більше вертикального падінгу */
+  max-width: 1100px; /* Обмежуємо максимальну ширину контенту */
+  margin: 0 auto; /* Центруємо */
+  width: 100%;
+}
+
+.card {
+  background-color: var(--card-bg);
+  padding: 1.75rem; /* 28px */
+  border-radius: var(--border-radius-lg); /* 8px */
+  margin-bottom: 2rem; /* 32px */
+  box-shadow: var(--box-shadow);
+  border: 1px solid var(--card-border);
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.section-title {
+  font-size: 1.25rem; /* 20px */
+  font-weight: 600;
+  margin-bottom: 1.5rem; /* 24px */
+  color: var(--text-color);
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--card-border);
+  transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+.control-group {
+  margin-bottom: 1.25rem; /* 20px */
+}
+.control-group:last-child {
+  margin-bottom: 0;
+}
+
+.control-label {
+  display: block;
+  margin-bottom: 0.5rem; /* 8px */
+  font-weight: 500;
+  color: var(--text-muted);
+  font-size: 0.875rem; /* 14px */
+  transition: color 0.3s ease;
+}
+
+.file-input,
+.select-input {
+  width: 100%;
+  padding: 0.75rem 1rem; /* 12px 16px */
+  border: 1px solid var(--input-border);
+  border-radius: var(--border-radius); /* 6px */
+  font-size: 0.9375rem; /* 15px */
+  background-color: var(--input-bg);
+  color: var(--input-text);
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, background-color 0.3s ease, color 0.3s ease;
+}
+.file-input {
+    padding-top: 0.6rem; padding-bottom: 0.6rem;
 }
 
 
-button:disabled {
-  background-color: #6c757d;
+.file-input::file-selector-button {
+  padding: 0.5rem 0.75rem; /* 8px 12px */
+  border: none;
+  background-color: var(--primary-color);
+  color: white;
+  border-radius: var(--border-radius-sm); /* 4px */
+  cursor: pointer;
+  margin-right: 0.75rem;
+  transition: background-color 0.2s ease;
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+.file-input::file-selector-button:hover {
+  background-color: var(--primary-hover-color);
+}
+
+.select-input:focus,
+.file-input:focus-within {
+  border-color: var(--input-focus-border);
+  outline: 0;
+  box-shadow: var(--input-focus-shadow);
+}
+
+.file-name-display {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+  text-align: left;
+  padding: 0.5rem 0.75rem;
+  background-color: rgba(var(--primary-color-light), 0.05); /* Дуже легкий фон */
+  border-radius: var(--border-radius-sm);
+  border: 1px solid var(--input-border);
+  word-break: break-all;
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+html[data-theme='dark'] .file-name-display {
+    background-color: rgba(var(--primary-color-dark), 0.1);
+}
+
+
+.button-primary {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 0.875rem 1.25rem; /* 14px 20px */
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 1rem; /* 16px */
+  font-weight: 500;
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease, box-shadow 0.2s ease;
+  width: 100%;
+  margin-top: 0.5rem;
+  box-shadow: var(--box-shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button-primary:hover:not(:disabled) {
+  background-color: var(--primary-hover-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.button-primary:active:not(:disabled) {
+  transform: translateY(0px);
+  box-shadow: var(--box-shadow-sm);
+}
+
+.button-primary:disabled {
+  background-color: var(--button-disabled-bg);
+  color: var(--button-disabled-text) !important; /* Важливо для темної теми */
   cursor: not-allowed;
   transform: none;
+  box-shadow: none;
+  opacity: 0.7;
 }
 
-.chart-container {
-  margin-top: 30px;
-  border: 1px solid #dee2e6;
-  padding: 25px;
-  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-  border-radius: 8px;
-  background-color: #ffffff;
+.button-loader-container {
+    padding: 0;
+    min-height: auto;
+    display: inline-flex; /* Щоб текст був поруч */
+    align-items: center;
+}
+
+.button-loader {
+    width: 18px;
+    height: 18px;
+    border-width: 3px;
+    margin-right: 8px;
+    border-top-color: white; /* Спінер на кнопці завжди білий */
+    border-left-color: transparent;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+}
+.button-primary:disabled .button-loader {
+    border-top-color: var(--button-disabled-text);
+}
+
+
+.chart-section {
+  /* Стилі для card вже застосовані */
+}
+.chart-wrapper {
+    /* position: relative та height/width задаються інлайн в App.js */
 }
 
 .error-message {
-  color: #721c24;
-  background-color: #f8d7da;
-  border: 1px solid #f5c6cb;
-  padding: 12px 15px;
-  border-radius: 6px;
-  margin-top: 15px;
-  margin-bottom: 15px;
-  text-align: left;
-  font-size: 0.9em;
+  color: var(--danger-color);
+  background-color: var(--danger-bg);
+  border: 1px solid var(--danger-border);
+  padding: 1rem 1.25rem;
+  border-radius: var(--border-radius);
+  margin: 1.5rem 0;
+  text-align: center;
+  font-size: 0.9375rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-/* Спінер */
 .loader-container {
   display: flex;
+  flex-direction: column; /* Спінер над текстом */
   justify-content: center;
   align-items: center;
-  padding: 20px 0; /* Менший вертикальний падінг */
-  min-height: 50px; 
+  padding: 1.5rem 0;
+  min-height: 80px; 
 }
 
 .loader {
-  border: 5px solid #e9ecef; /* Світліший сірий */
-  border-top: 5px solid #007bff; /* Синій */
+  border: 5px solid var(--input-border);
+  border-top: 5px solid var(--primary-color);
   border-radius: 50%;
-  width: 30px; /* Трохи менший */
-  height: 30px;
-  animation: spin 0.8s linear infinite; /* Швидше */
+  width: 36px; /* Трохи більший */
+  height: 36px;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 0.75rem; /* Відступ від тексту */
 }
 
 @keyframes spin {
@@ -169,61 +412,87 @@ button:disabled {
 }
 
 .loading-text {
-  margin-left: 12px; /* Менший відступ */
-  font-size: 1em; /* Трохи менший */
-  color: #495057;
+  /* margin-left: 0; -- тепер текст під спінером */
+  font-size: 1rem;
+  color: var(--text-muted);
+  font-weight: 500;
 }
 
-/* Медіа-запити для адаптивності */
+.App-footer {
+  text-align: center;
+  padding: 1.5rem;
+  margin-top: 2.5rem;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  border-top: 1px solid var(--card-border);
+  transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+
+/* Адаптивність */
 @media screen and (max-width: 768px) {
+  html {
+    font-size: 15px; /* Зменшуємо базовий шрифт для менших екранів */
+  }
+  .App-header {
+    padding: 0.75rem 1rem;
+  }
   .App-header h1 {
-    font-size: 1.8em;
+    font-size: 1.25rem;
   }
-
-  .controls {
-    padding: 20px;
-    margin-left: 10px;
-    margin-right: 10px;
+  .theme-toggle-button {
+    width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
   }
-
-  label {
-    font-size: 0.9em;
+  .App-main {
+    padding: 1.5rem 0.75rem;
   }
-
-  input[type="file"],
-  select,
-  button {
-    font-size: 0.95em;
-    padding: 10px 12px;
+  .card {
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
   }
-
-  .chart-container {
-    width: 95vw;
-    height: 400px; /* Збільшено трохи, бо 350 може бути мало */
-    padding: 15px;
+  .section-title {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+  .chart-wrapper {
+    height: 350px !important; /* Зменшуємо висоту графіка */
   }
 }
 
 @media screen and (max-width: 480px) {
+  html {
+    font-size: 14px;
+  }
   .App-header h1 {
-    font-size: 1.6em; /* Змінено */
+    font-size: 1.1rem; 
   }
-  
-  .controls {
-    padding: 15px;
+  .theme-toggle-button {
+    width: 28px;
+    height: 28px;
+    font-size: 0.8rem;
   }
-
-  .chart-container {
-    height: 350px; /* Змінено */
-    padding: 10px;
+  .controls, .card {
+    padding: 1rem;
+    border-radius: var(--border-radius);
   }
-
-  input[type="file"],
-  select,
-  button {
-    font-size: 0.9em;
+  .button-primary, .select-input, .file-input {
+    font-size: 0.875rem;
+    padding: 0.6rem 0.75rem;
+  }
+  .file-input::file-selector-button {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8rem;
+  }
+  .chart-wrapper {
+    height: 300px !important;
   }
   .loading-text {
-    font-size: 0.9em;
+    font-size: 0.9rem;
+  }
+  .App-footer {
+    font-size: 0.8rem;
+    padding: 1rem;
   }
 }
