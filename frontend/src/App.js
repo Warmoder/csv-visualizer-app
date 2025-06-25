@@ -3,28 +3,12 @@ import axios from 'axios';
 import { Bar, Line, Pie } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  PointElement,
-  LineElement,
-  ArcElement,
-  Title,
-  Tooltip,
-  Legend,
+  CategoryScale, LinearScale, BarElement, PointElement, LineElement, ArcElement, Title, Tooltip, Legend,
 } from 'chart.js';
-import './App.css';
+import './App.css'; // Переконайтесь, що цей файл існує
 
 ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  PointElement,
-  LineElement,
-  ArcElement,
-  Title,
-  Tooltip,
-  Legend
+  CategoryScale, LinearScale, BarElement, PointElement, LineElement, ArcElement, Title, Tooltip, Legend
 );
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
@@ -44,9 +28,20 @@ function App() {
   const [isLoadingFile, setIsLoadingFile] = useState(false);
   const [isProcessingChart, setIsProcessingChart] = useState(false);
 
+  const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light');
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme); // Встановлюємо атрибут на <html>
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
+  };
+
   useEffect(() => {
     if (!file) return;
-
+    // ... (логіка uploadFile залишається такою ж, як у вашому останньому варіанті) ...
     const uploadFile = async () => {
       const formData = new FormData();
       formData.append('file', file);
@@ -79,7 +74,9 @@ function App() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [file]);
 
+
   const handleApiError = (err, actionContext) => {
+    // ... (логіка handleApiError залишається такою ж) ...
     console.error(`Помилка ${actionContext}:`, err);
     let errorMessage = `Не вдалося виконати ${actionContext}.`;
     if (err.response && err.response.data && err.response.data.error) {
@@ -91,16 +88,20 @@ function App() {
   };
 
   const handleBuildChart = async () => {
+    // ... (логіка handleBuildChart залишається такою ж) ...
     if (!selectedXColumn) {
       setError('Будь ласка, оберіть стовпець для осі X / Категорій.');
       return;
     }
-    // Логіка перевірки для Y-стовпця
-    if ((selectedChartType === 'bar' || selectedChartType === 'line') && !selectedYColumn && selectedAggregation !== 'count') {
-      setError('Для стовпчикової/лінійної діаграми оберіть стовпець для осі Y або тип агрегації "Кількість".');
+    const yColumnRequiredForType = (selectedChartType === 'bar' || selectedChartType === 'line');
+    const aggregationAllowsNoY = selectedAggregation === 'count';
+    const pieSumRequiresY = selectedChartType === 'pie' && selectedAggregation === 'sum';
+
+    if (yColumnRequiredForType && !aggregationAllowsNoY && !selectedYColumn) {
+      setError('Для цього типу графіка та агрегації оберіть стовпець для осі Y.');
       return;
     }
-    if (selectedChartType === 'pie' && selectedAggregation === 'sum' && !selectedYColumn) {
+    if (pieSumRequiresY && !selectedYColumn) {
       setError('Для кругової діаграми з агрегацією "Сума" оберіть стовпець для значень (Y).');
       return;
     }
@@ -135,13 +136,16 @@ function App() {
             data: values,
             backgroundColor: selectedChartType === 'pie' 
               ? generateColors(values.length) 
-              : (selectedChartType === 'line' ? 'rgba(75, 192, 192, 0.6)' : 'rgba(54, 162, 235, 0.6)'),
+              : (selectedChartType === 'line' ? 'rgba(var(--chart-line-rgb), 0.6)' : 'rgba(var(--chart-bar-rgb), 0.6)'), // Використання CSS змінних для кольорів
             borderColor: selectedChartType === 'pie' 
               ? generateColors(values.length, 1)
-              : (selectedChartType === 'line' ? 'rgba(75, 192, 192, 1)' : 'rgba(54, 162, 235, 1)'),
-            borderWidth: 1,
+              : (selectedChartType === 'line' ? 'rgb(var(--chart-line-rgb))' : 'rgb(var(--chart-bar-rgb))'),
+            borderWidth: selectedChartType === 'pie' ? 1 : 2, // Трохи товща рамка для ліній та стовпців
             fill: selectedChartType === 'line' ? false : undefined,
-            tension: selectedChartType === 'line' ? 0.1 : undefined,
+            tension: selectedChartType === 'line' ? 0.3 : undefined, // Більш плавна лінія
+            pointBackgroundColor: selectedChartType === 'line' ? 'rgb(var(--chart-line-rgb))' : undefined, // Колір точок на лінії
+            pointRadius: selectedChartType === 'line' ? 4 : undefined,
+            pointHoverRadius: selectedChartType === 'line' ? 6 : undefined,
           },
         ],
       };
@@ -153,77 +157,153 @@ function App() {
     }
   };
 
-  const generateColors = (numColors, alpha = 0.7) => {
-    const baseColors = [
-        `rgba(255, 99, 132, ${alpha})`, `rgba(54, 162, 235, ${alpha})`, `rgba(255, 206, 86, ${alpha})`,
-        `rgba(75, 192, 192, ${alpha})`, `rgba(153, 102, 255, ${alpha})`, `rgba(255, 159, 64, ${alpha})`,
-        `rgba(199, 199, 199, ${alpha})`, `rgba(83, 102, 255, ${alpha})`, `rgba(40, 159, 64, ${alpha})`,
-        `rgba(210, 99, 132, ${alpha})`
-    ];
+  const generateColors = (numColors) => {
+    // Покращена генерація кольорів для Pie chart
+    const baseHues = [0, 210, 40, 280, 160, 60]; // Hues for red, blue, yellow, purple, cyan, orange
     const colors = [];
     for (let i = 0; i < numColors; i++) {
-      colors.push(baseColors[i % baseColors.length]);
+      const hue = baseHues[i % baseHues.length];
+      const saturation = 70 + Math.random() * 10; // 70-80%
+      const lightness = 55 + Math.random() * 10; // 55-65%
+      colors.push(`hsla(${hue}, ${saturation}%, ${lightness}%, 0.7)`);
     }
     return colors;
   };
   
-  const chartOptions = {
+  // Динамічне отримання кольорів для Chart.js з CSS змінних
+  const getChartColors = () => {
+    const style = getComputedStyle(document.documentElement);
+    return {
+      textColor: style.getPropertyValue('--chart-text-color').trim(),
+      gridColor: style.getPropertyValue('--chart-grid-color').trim(),
+      // Для backgroundColor та borderColor, ми використовуємо RGB значення, які визначимо в CSS
+    };
+  };
+  
+    const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: { display: true, position: 'top' },
-      title: { display: true, text: `Тип графіка: ${selectedChartType.charAt(0).toUpperCase() + selectedChartType.slice(1)}` },
+      legend: { 
+        display: true, 
+        position: 'top',
+        labels: { color: getChartColors().textColor, font: { size: 13 } }
+      },
+      title: { 
+        display: true, 
+        text: `Тип графіка: ${selectedChartType.charAt(0).toUpperCase() + selectedChartType.slice(1)}`,
+        color: getChartColors().textColor,
+        font: { size: 16, weight: '600' }
+      },
+      tooltip: { // Починаємо налаштування тултипів
+        backgroundColor: `rgba(${getComputedStyle(document.documentElement).getPropertyValue('--tooltip-bg-rgb').trim()}, 0.9)`,
+        titleColor: `rgb(${getComputedStyle(document.documentElement).getPropertyValue('--tooltip-text-rgb').trim()})`,
+        bodyColor: `rgb(${getComputedStyle(document.documentElement).getPropertyValue('--tooltip-text-rgb').trim()})`,
+        borderColor: `rgb(${getComputedStyle(document.documentElement).getPropertyValue('--tooltip-border-rgb').trim()})`,
+        borderWidth: 1,
+        padding: 10,
+        cornerRadius: 4,
+        callbacks: { // Додаємо або модифікуємо колбеки
+          label: function(context) {
+            let label = context.dataset.label || ''; // Наприклад, "Населення по Місто"
+            if (label) {
+              label += ': ';
+            }
+            if (context.parsed !== null) {
+              // context.label - це мітка сегмента (наприклад, "Київ")
+              // context.raw - це сире значення для цього сегмента (наприклад, населення)
+              // context.formattedValue - відформатоване значення
+              if (selectedChartType === 'pie' || selectedChartType === 'doughnut') { // Специфічно для кругових
+                label = context.label + ': ' + context.formattedValue;
+              } else { // Для інших типів графіків (bar, line)
+                label += context.formattedValue;
+              }
+            }
+            return label;
+          }
+        }
+      }
     },
     scales: (selectedChartType === 'bar' || selectedChartType === 'line') ? {
-      y: { beginAtZero: true, title: { display: true, text: selectedYColumn || (selectedAggregation === 'count' ? 'Кількість' : 'Значення') } },
-      x: { title: { display: true, text: selectedXColumn || 'Категорії' } },
-    } : {}, // Порожній об'єкт для Pie, щоб не було помилок
+      y: { 
+        beginAtZero: true, 
+        title: { display: true, text: selectedYColumn || (selectedAggregation === 'count' ? 'Кількість' : 'Значення'), color: getChartColors().textColor, font: {size: 14} },
+        ticks: { color: getChartColors().textColor, font: {size: 12} }, 
+        grid: { color: getChartColors().gridColor, drawBorder: false } 
+      },
+      x: { 
+        title: { display: true, text: selectedXColumn || 'Категорії', color: getChartColors().textColor, font: {size: 14} },
+        ticks: { color: getChartColors().textColor, font: {size: 12} }, 
+        grid: { display: false } // Забираємо вертикальну сітку для чистоти
+      },
+    } : {},
   };
 
   const renderChart = () => {
     if (!chartData) return null;
-    const key = `${selectedChartType}-${selectedXColumn}-${selectedYColumn}-${selectedAggregation}`; // Унікальний ключ для перерендеру
+    const key = `${selectedChartType}-${selectedXColumn}-${selectedYColumn}-${selectedAggregation}-${theme}`; 
+    // Оновлюємо dataset кольори перед рендером, якщо вони залежать від теми
+    const updatedChartData = {
+        ...chartData,
+        datasets: chartData.datasets.map(dataset => ({
+            ...dataset,
+            backgroundColor: selectedChartType === 'pie' 
+              ? generateColors(dataset.data.length) 
+              : (selectedChartType === 'line' ? `rgba(${getComputedStyle(document.documentElement).getPropertyValue('--chart-line-rgb').trim()}, 0.4)` : `rgba(${getComputedStyle(document.documentElement).getPropertyValue('--chart-bar-rgb').trim()}, 0.7)`),
+            borderColor: selectedChartType === 'pie' 
+              ? generateColors(dataset.data.length, 1).map(c => c.replace('0.7', '1')) // Для Pie border має бути непрозорим
+              : (selectedChartType === 'line' ? `rgb(${getComputedStyle(document.documentElement).getPropertyValue('--chart-line-rgb').trim()})` : `rgb(${getComputedStyle(document.documentElement).getPropertyValue('--chart-bar-rgb').trim()})`),
+            pointBackgroundColor: selectedChartType === 'line' ? `rgb(${getComputedStyle(document.documentElement).getPropertyValue('--chart-line-rgb').trim()})` : undefined,
+        }))
+    };
+
     switch (selectedChartType) {
-      case 'bar': return <Bar key={key} data={chartData} options={chartOptions} />;
-      case 'line': return <Line key={key} data={chartData} options={chartOptions} />;
-      case 'pie': return <Pie key={key} data={chartData} options={chartOptions} />;
+      case 'bar': return <Bar key={key} data={updatedChartData} options={chartOptions} />;
+      case 'line': return <Line key={key} data={updatedChartData} options={chartOptions} />;
+      case 'pie': return <Pie key={key} data={updatedChartData} options={chartOptions} />;
       default: return null;
     }
   };
   
-  const yColumnRequired = (selectedChartType === 'bar' || selectedChartType === 'line') && selectedAggregation !== 'count';
-  const yColumnRelevantForPieSum = selectedChartType === 'pie' && selectedAggregation === 'sum';
-
+  const yColumnIsEffectivelyDisabled = selectedChartType === 'pie' && selectedAggregation === 'count';
+  const aggregationIsRelevant = selectedChartType === 'pie' || ((selectedChartType === 'bar' || selectedChartType === 'line') && selectedXColumn);
 
   return (
     <div className="App">
       <header className="App-header">
-        <h1>CSV Візуалізатор Проекту</h1>
+        <div className="header-content">
+            <svg className="header-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="32px" height="32px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 12.5H8V14h2v1.5zm0-2.5H8V10h2v1.5zm0-2.5H8V7.5h2V10zm4.5 5H12V14h2.5v1.5zm0-2.5H12V10h2.5v1.5zm0-2.5H12V7.5h2.5V10zm2.5 5h-2V14h2v1.5zm0-2.5h-2V10h2v1.5z"/></svg>
+            <h1>CSV Візуалізатор</h1>
+        </div>
+        <button onClick={toggleTheme} className="theme-toggle-button" title={theme === 'light' ? 'Темна тема' : 'Світла тема'}>
+          {theme === 'light' ? '🌙' : '☀️'}
+        </button>
       </header>
-      <main>
-        <div className="controls">
-          <div>
-            <label htmlFor="csvFile">1. Завантажте CSV файл:</label>
-            <input type="file" id="csvFile" accept=".csv" onChange={(e) => setFile(e.target.files[0])} />
-            {fileName && !isLoadingFile && <p className="file-name-display">Обраний файл: {fileName}</p>}
+      <main className="App-main">
+        <section className="controls-section card">
+          <h2 className="section-title">Налаштування візуалізації</h2>
+          <div className="control-group">
+            <label htmlFor="csvFile" className="control-label">1. Завантажте CSV файл:</label>
+            <input type="file" id="csvFile" className="file-input" accept=".csv" onChange={(e) => setFile(e.target.files[0])} />
+            {fileName && !isLoadingFile && <p className="file-name-display">Обрано: <strong>{fileName}</strong></p>}
           </div>
 
           {isLoadingFile && (
             <div className="loader-container">
               <div className="loader"></div>
-              <p className="loading-text">Завантаження файлу...</p>
+              <p className="loading-text">Обробка файлу...</p>
             </div>
           )}
           
           {headers.length > 0 && !isLoadingFile && (
             <>
-              <div>
-                <label htmlFor="chartTypeSelect">2. Оберіть тип графіка:</label>
-                <select id="chartTypeSelect" value={selectedChartType} onChange={(e) => {
+              <div className="control-group">
+                <label htmlFor="chartTypeSelect" className="control-label">2. Тип графіка:</label>
+                <select id="chartTypeSelect" className="select-input" value={selectedChartType} onChange={(e) => {
                     setSelectedChartType(e.target.value); 
                     setChartData(null); 
-                    setSelectedYColumn(''); // Скидаємо Y, щоб користувач переобрав якщо потрібно
-                    setSelectedAggregation(''); // Скидаємо агрегацію
+                    setSelectedYColumn('');
+                    setSelectedAggregation('');
                 }}>
                   <option value="bar">Стовпчикова</option>
                   <option value="line">Лінійна</option>
@@ -231,74 +311,92 @@ function App() {
                 </select>
               </div>
 
-              <div>
-                <label htmlFor="xAxisSelect">3. Оберіть стовпець для осі X / Категорій:</label>
-                <select id="xAxisSelect" value={selectedXColumn} onChange={(e) => {setSelectedXColumn(e.target.value); setChartData(null);}}>
-                  <option value="" disabled>-- Оберіть стовпець --</option>
+              <div className="control-group">
+                <label htmlFor="xAxisSelect" className="control-label">3. Вісь X / Категорії:</label>
+                <select id="xAxisSelect" className="select-input" value={selectedXColumn} onChange={(e) => {setSelectedXColumn(e.target.value); setChartData(null);}}>
+                  <option value="" disabled>-- Оберіть --</option>
                   {headers.map((h) => (<option key={h} value={h}>{h}</option>))}
                 </select>
               </div>
               
-              <div>
-                <label htmlFor="yAxisSelect">
-                    4. Оберіть стовпець для осі Y / Значень 
-                    {selectedChartType === 'pie' && selectedAggregation === 'count' ? " (не потрібно для Pie/Count)" : 
-                     selectedChartType === 'pie' && !selectedAggregation ? " (або оберіть агрегацію)" : ""}
+              <div className="control-group">
+                <label htmlFor="yAxisSelect" className="control-label">
+                    4. Вісь Y / Значення
+                    {yColumnIsEffectivelyDisabled ? " (не потрібно для Кількість/Pie)" : ""}
                 </label>
                 <select 
                   id="yAxisSelect" 
+                  className="select-input"
                   value={selectedYColumn} 
                   onChange={(e) => {setSelectedYColumn(e.target.value); setChartData(null);}}
-                  disabled={selectedChartType === 'pie' && selectedAggregation === 'count'}
+                  disabled={yColumnIsEffectivelyDisabled}
                 >
                   <option value="">
-                    {selectedChartType === 'pie' && selectedAggregation === 'count' ? "-- Не використовується --" : 
-                     (selectedChartType === 'pie' && selectedAggregation !== 'sum') ? "-- Оберіть для Sum або залиште для Count --" : 
-                     "-- Оберіть стовпець --"
+                    {yColumnIsEffectivelyDisabled ? "-- Не використовується --" : 
+                     (selectedChartType === 'pie' && selectedAggregation !== 'sum') ? "-- Для Sum або залиште для Count --" : 
+                     "-- Оберіть --"
                     }
                   </option>
                   {headers.map((h) => (<option key={h} value={h}>{h}</option>))}
                 </select>
               </div>
 
-              <div>
-                <label htmlFor="aggregationSelect">5. Оберіть тип агрегації (якщо потрібно):</label>
-                <select 
-                  id="aggregationSelect" 
-                  value={selectedAggregation} 
-                  onChange={(e) => {setSelectedAggregation(e.target.value); setChartData(null); if (e.target.value === 'count' && selectedChartType === 'pie') setSelectedYColumn('');}}
-                >
-                  <option value="">Без агрегації</option>
-                  <option value="sum">Сума (Sum)</option>
-                  <option value="count">Кількість (Count)</option>
-                </select>
-              </div>
+              {aggregationIsRelevant && (
+                 <div className="control-group">
+                  <label htmlFor="aggregationSelect" className="control-label">5. Тип агрегації:</label>
+                  <select 
+                    id="aggregationSelect" 
+                    className="select-input"
+                    value={selectedAggregation} 
+                    onChange={(e) => {
+                        setSelectedAggregation(e.target.value); 
+                        setChartData(null); 
+                        if (e.target.value === 'count' && selectedChartType === 'pie') {
+                            setSelectedYColumn('');
+                        }
+                    }}
+                  >
+                    <option value="">Без агрегації</option>
+                    <option value="sum">Сума</option>
+                    <option value="count">Кількість</option>
+                  </select>
+                </div>
+              )}
              
-              <div>
+              <div className="control-group">
                 <button 
+                    className="button-primary"
                     onClick={handleBuildChart} 
                     disabled={
                         isProcessingChart || 
                         !selectedXColumn ||
-                        (yColumnRequired && !selectedYColumn) ||
-                        (yColumnRelevantForPieSum && !selectedYColumn)
+                        ( (selectedChartType === 'bar' || selectedChartType === 'line') && !selectedYColumn && selectedAggregation !== 'count' ) ||
+                        ( selectedChartType === 'pie' && selectedAggregation === 'sum' && !selectedYColumn )
                     }
                 >
-                  {isProcessingChart ? 'Обробка...' : 'Побудувати графік'}
+                  {isProcessingChart ? (
+                    <div className="loader-container button-loader-container">
+                        <div className="loader button-loader"></div>Обробка...
+                    </div>
+                  ) : 'Побудувати графік'}
                 </button>
               </div>
             </>
           )}
-
-          {error && !isLoadingFile && !isProcessingChart && <p className="error-message">{error}</p>}
-        </div>
+          {error && !isLoadingFile && !isProcessingChart && <div className="error-message card">{error}</div>}
+        </section>
 
         {chartData && !isProcessingChart && !error && (
-          <div className="chart-container" style={{ position: 'relative', height: '500px', width: '90vw', maxWidth: '1000px', margin: '20px auto' }}>
-            {renderChart()}
-          </div>
+          <section className="chart-section card">
+            <div className="chart-wrapper" style={{ position: 'relative', height: '450px' /* Змінено висоту */ }}>
+              {renderChart()}
+            </div>
+          </section>
         )}
       </main>
+       <footer className="App-footer">
+        <p>© {new Date().getFullYear()} CSV Visualizer. Created by petuxi.</p>
+      </footer>
     </div>
   );
 }
