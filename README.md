@@ -1,6 +1,6 @@
 # CSV Visualizer - Веб-додаток для візуалізації даних
 
-![CSV Visualizer Demo](https://github.com/user-attachments/assets/88125095-5e68-43f3-9662-3469e5737e3a)
+![CSV Visualizer Demo](https://github.com/user-attachments/assets/4b18a876-90a1-4585-a0da-81ee7c751668)
 
 Простий та інтуїтивно зрозумілий інструмент, що дозволяє користувачам швидко перетворювати дані з CSV-файлів на інтерактивні графіки прямо в браузері.
 
