@@ -47,7 +47,7 @@
     *   [Node.js](https://nodejs.org/) - середовище виконання JavaScript (необхідне для React, npm/yarn).
     *   [npm](https://www.npmjs.com/) (або [Yarn](https://yarnpkg.com/)) - менеджер пакетів для Node.js.
     *   Віртуальне середовище Python ([venv](https://docs.python.org/3/library/venv.html)) - для ізоляції залежностей Python.
-    *   VS Code (Visual Studio Code) (ймовірно) - текстовий редактор/IDE.
+    *   VS Code (Visual Studio Code) - текстовий редактор/IDE.
     *   Термінал (PowerShell) - для виконання команд.
 
 *   **Формати даних та протоколи:**
@@ -68,8 +68,8 @@
 
 1.  **Клонуйте репозиторій:**
     ```bash
-    git clone https://github.com/[Ваш-Нікнейм]/[Назва-Репозиторію].git
-    cd [Назва-Репозиторію]
+    git clone https://github.com/Warmoder/csv-visualizer-app.git
+    cd csv-visualizer-app
     ```
 
 2.  **Перейдіть у папку бекенду:**
@@ -105,7 +105,7 @@
 
 2.  **Перейдіть у папку фронтенду:**
     ```bash
-    cd [Назва-Репозиторію]/frontend
+    cd csv-visualizer-app/frontend
     ```
 
 3.  **Встановіть залежності:**
