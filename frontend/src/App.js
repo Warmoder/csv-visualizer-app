@@ -395,7 +395,7 @@ function App() {
         )}
       </main>
        <footer className="App-footer">
-        <p>© {new Date().getFullYear()} CSV Visualizer. Created by petuxi.</p>
+        <p>© {new Date().getFullYear()} CSV Visualizer. Created by Team.</p>
       </footer>
     </div>
   );
